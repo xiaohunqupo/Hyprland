@@ -850,6 +850,9 @@ void CCompositor::focusSurface(wlr_surface* pSurface, CWindow* pWindowOwner) {
         (pWindowOwner && m_sSeat.seat->keyboard_state.focused_surface == g_pXWaylandManager->getWindowSurface(pWindowOwner)))
         return; // Don't focus when already focused on this.
 
+    // release mouse events
+    g_pInputManager->releaseAllMouseButtons();
+
     // Unfocus last surface if should
     if (m_pLastFocus && !pWindowOwner)
         g_pXWaylandManager->activateSurface(m_pLastFocus, false);
@@ -1082,6 +1085,9 @@ void CCompositor::moveWindowToTop(CWindow* pWindow) {
                 break;
             }
         }
+
+        if (pw->m_bIsMapped)
+            g_pHyprRenderer->damageMonitor(getMonitorFromID(pw->m_iMonitorID));
     };
 
     moveToTop(pWindow);
