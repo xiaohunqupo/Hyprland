@@ -7,14 +7,12 @@
 #include "../../helpers/Timer.hpp"
 #include "InputMethodRelay.hpp"
 
-enum eClickBehaviorMode
-{
+enum eClickBehaviorMode {
     CLICKMODE_DEFAULT = 0,
     CLICKMODE_KILL
 };
 
-enum eMouseBindMode
-{
+enum eMouseBindMode {
     MBIND_INVALID = -1,
     MBIND_MOVE    = 0,
     MBIND_RESIZE
@@ -137,6 +135,8 @@ class CInputManager {
     std::string deviceNameToInternalString(std::string);
     std::string getNameForNewDevice(std::string);
 
+    void        releaseAllMouseButtons();
+
   private:
     bool m_bCursorImageOverriden = false;
 
@@ -165,6 +165,9 @@ class CInputManager {
     wlr_surface*   m_pFoundSurfaceToFocus = nullptr;
     SLayerSurface* m_pFoundLSToFocus      = nullptr;
     CWindow*       m_pFoundWindowToFocus  = nullptr;
+
+    // for releasing mouse buttons
+    std::list<uint32_t> m_lCurrentlyHeldButtons;
 
     // swipe
     void beginWorkspaceSwipe();
